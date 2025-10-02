@@ -16,9 +16,52 @@ export default function ChatPanel({ roomId }) {
   const socket = getSocket(token);
 
   useEffect(() => {
-    if (!socket || !roomId) return;
+    if (!roomId) return;
     
-    // Load history only once per room
+    // Always load demo content for demo rooms, regardless of socket status
+    if (roomId.startsWith('demo-room-')) {
+      if (loadedRoomRef.current !== roomId) {
+        loadedRoomRef.current = roomId;
+        setLoading(true);
+        setMessages([
+          { 
+            id: 'demo-1',
+            content: 'Welcome to the demo room!', 
+            createdAt: '2025-10-02T10:00:00Z', 
+            sender: { id: 'system', full_name: 'System', email: 'system@onedesk.com' } 
+          },
+          { 
+            id: 'demo-2',
+            content: 'This is a mock chat room for testing. Try sending a message!', 
+            createdAt: '2025-10-02T10:01:00Z', 
+            sender: { id: 'bot', full_name: 'OneDesk Bot', email: 'bot@onedesk.com' } 
+          },
+        ]);
+        setLoading(false);
+      }
+      return; // Exit early for demo rooms - no socket operations needed
+    }
+    
+    // For real rooms, check if socket is available
+    if (!socket) {
+      // No socket available, show offline message
+      if (loadedRoomRef.current !== roomId) {
+        loadedRoomRef.current = roomId;
+        setLoading(true);
+        setMessages([
+          { 
+            id: 'offline-msg',
+            content: 'Chat is currently offline. Please check your connection and try again.', 
+            createdAt: new Date().toISOString(), 
+            sender: { id: 'system', full_name: 'System', email: 'system@onedesk.com' } 
+          }
+        ]);
+        setLoading(false);
+      }
+      return;
+    }
+    
+    // Load history only once per room for real rooms
     if (loadedRoomRef.current !== roomId) {
       loadedRoomRef.current = roomId;
       setLoading(true);
@@ -26,92 +69,95 @@ export default function ChatPanel({ roomId }) {
       setTypingUsers({});
       
       (async () => {
-        if (roomId && roomId.startsWith('demo-room-')) {
+        try {
+          // Only try to load messages if we have a valid token and this isn't a demo room
+          if (token && !roomId.startsWith('demo-room-')) {
+            const res = await apiGet(`/api/chat/rooms/${roomId}/messages`, token);
+            setMessages(res.messages || []);
+          } else {
+            setMessages([]);
+          }
+        } catch (err) {
+          // Silently handle API errors for better UX
+          console.log('Chat room not accessible, using demo mode');
           setMessages([
             { 
-              id: 'demo-1',
-              content: 'Welcome to the demo room!', 
-              createdAt: '2025-10-02T10:00:00Z', 
+              id: 'demo-fallback',
+              content: 'This chat room is not accessible. Using demo mode.', 
+              createdAt: new Date().toISOString(), 
               sender: { id: 'system', full_name: 'System', email: 'system@onedesk.com' } 
-            },
-            { 
-              id: 'demo-2',
-              content: 'This is a mock chat room for testing. Try sending a message!', 
-              createdAt: '2025-10-02T10:01:00Z', 
-              sender: { id: 'bot', full_name: 'OneDesk Bot', email: 'bot@onedesk.com' } 
-            },
+            }
           ]);
-          setLoading(false);
-          return;
-        }
-        
-        try {
-          const res = await apiGet(`/api/chat/rooms/${roomId}/messages`, token);
-          setMessages(res.messages || []);
-        } catch (err) {
-          console.error('Failed to load messages:', err);
-          // Set empty messages for real rooms that fail to load
-          setMessages([]);
         } finally {
           setLoading(false);
         }
       })();
     }
 
-    // Join the chat room
-    socket.emit('join_chat_room', roomId);
-
-    // Listen for new messages
-    const onNewMessage = (message) => {
-      setMessages(prev => [...prev, message]);
-    };
-
-    // Listen for message sent confirmation (for sender)
-    const onMessageSent = (message) => {
-      setMessages(prev => [...prev, message]);
-    };
-
-    // Listen for typing indicators
-    const onUserTyping = ({ user, isTyping }) => {
-      if (!user) return;
-      
-      setTypingUsers(prev => {
-        const next = { ...prev };
-        const userId = user.id || 'unknown';
-        const userName = user.full_name || user.email || 'Someone';
-        
-        if (isTyping) {
-          next[userId] = userName;
-        } else {
-          delete next[userId];
-        }
-        return next;
-      });
-    };
-
-    // Listen for errors
-    const onError = (error) => {
-      // Only log meaningful errors, ignore empty objects
-      if (error && (error.message || Object.keys(error).length > 0)) {
-        console.error('Chat error:', error);
-        if (error?.message) {
-          console.error('Error details:', error.message);
-        }
+    // Only set up socket listeners for real rooms with valid socket
+    if (socket && !roomId.startsWith('demo-room-')) {
+      // Try to join the chat room
+      try {
+        socket.emit('join_chat_room', roomId);
+      } catch (err) {
+        console.log('Could not join chat room:', roomId);
       }
-    };
 
-    socket.on('new_message', onNewMessage);
-    socket.on('message_sent', onMessageSent);
-    socket.on('user_typing', onUserTyping);
-    socket.on('error', onError);
+      // Listen for new messages
+      const onNewMessage = (message) => {
+        setMessages(prev => [...prev, message]);
+      };
 
-    return () => {
-      socket.off('new_message', onNewMessage);
-      socket.off('message_sent', onMessageSent);
-      socket.off('user_typing', onUserTyping);
-      socket.off('error', onError);
-      socket.emit('leave_chat_room', roomId);
-    };
+      // Listen for message sent confirmation (for sender)
+      const onMessageSent = (message) => {
+        setMessages(prev => [...prev, message]);
+      };
+
+      // Listen for typing indicators
+      const onUserTyping = ({ user, isTyping }) => {
+        if (!user) return;
+        
+        setTypingUsers(prev => {
+          const next = { ...prev };
+          const userId = user.id || 'unknown';
+          const userName = user.full_name || user.email || 'Someone';
+          
+          if (isTyping) {
+            next[userId] = userName;
+          } else {
+            delete next[userId];
+          }
+          return next;
+        });
+      };
+
+      // Listen for errors but don't log them to console to avoid spam
+      const onError = (error) => {
+        // Silently handle socket errors for better UX
+        // Only log if it's an unexpected error type
+        if (error && error.message && !error.message.includes('Not a member') && !error.message.includes('Permission denied')) {
+          console.log('Chat connection issue:', error.message);
+        }
+      };
+
+      socket.on('new_message', onNewMessage);
+      socket.on('message_sent', onMessageSent);
+      socket.on('user_typing', onUserTyping);
+      socket.on('error', onError);
+
+      return () => {
+        socket.off('new_message', onNewMessage);
+        socket.off('message_sent', onMessageSent);
+        socket.off('user_typing', onUserTyping);
+        socket.off('error', onError);
+        // Try to leave the chat room
+        try {
+          socket.emit('leave_chat_room', roomId);
+        } catch (err) {
+          // Silently handle leave errors
+        }
+      };
+    }
   }, [socket, roomId, token]);
 
   // Auto-scroll to bottom when new messages arrive
@@ -122,7 +168,7 @@ export default function ChatPanel({ roomId }) {
   }, [messages]);
 
   const sendMessage = () => {
-    if (!text.trim() || !socket) return;
+    if (!text.trim()) return;
     
     // For demo rooms, add message locally
     if (roomId && roomId.startsWith('demo-room-')) {
@@ -141,18 +187,34 @@ export default function ChatPanel({ roomId }) {
       return;
     }
 
-    // Send real message
-    socket.emit('send_message', { 
-      roomId, 
-      content: text.trim(),
-      messageType: 'text'
-    });
+    // Send real message only if socket is available
+    if (socket) {
+      socket.emit('send_message', { 
+        roomId, 
+        content: text.trim(),
+        messageType: 'text'
+      });
+    } else {
+      // Show offline message if no socket
+      const offlineMessage = {
+        id: `offline-${Date.now()}`,
+        content: text.trim(),
+        createdAt: new Date().toISOString(),
+        sender: { 
+          id: 'current-user', 
+          full_name: 'You (Offline)', 
+          email: 'you@example.com' 
+        }
+      };
+      setMessages(prev => [...prev, offlineMessage]);
+    }
     setText('');
   };
 
   const handleInputChange = (value) => {
     setText(value);
     
+    // Skip typing indicators for demo rooms or if no socket
     if (!socket || !roomId || roomId.startsWith('demo-room-')) return;
 
     // Send typing start
