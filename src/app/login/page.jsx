@@ -32,11 +32,11 @@ export default function LoginPage() {
         <div className="mt-6 space-y-4">
           <div>
             <label className="text-sm text-gray-700">Email</label>
-            <input type="email" autoComplete="email" value={email} onChange={(e)=>setEmail(e.target.value)} required className="mt-1 w-full rounded-md border px-3 py-2 bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input type="email" autoComplete="email" value={email} onChange={(e)=>setEmail(e.target.value)} required className="mt-1 w-full rounded-md border px-3 py-2 bg-white text-black placeholder-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           <div>
             <label className="text-sm text-gray-700">Password</label>
-            <input type="password" autoComplete="current-password" value={password} onChange={(e)=>setPassword(e.target.value)} required className="mt-1 w-full rounded-md border px-3 py-2 bg-white text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            <input type="password" autoComplete="current-password" value={password} onChange={(e)=>setPassword(e.target.value)} required className="mt-1 w-full rounded-md border px-3 py-2 bg-white text-black placeholder-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           </div>
           {error && <p className="text-sm text-rose-600">{error}</p>}
           <button disabled={loading} className="w-full rounded-md bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white py-2 font-medium hover:opacity-90 disabled:opacity-60">

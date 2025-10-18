@@ -304,12 +304,12 @@ export default function ChatPanel({ roomId }) {
           onChange={(e) => handleInputChange(e.target.value)}
           onKeyPress={handleKeyPress}
           placeholder="Type a message..." 
-          className="flex-1 rounded-md border px-3 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+          className="flex-1 rounded-md border px-3 py-2 text-sm text-gray-900 placeholder-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
         />
         <button 
           onClick={sendMessage}
           disabled={!text.trim()}
-          className="rounded-md bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white px-4 py-2 text-sm font-medium hover:from-indigo-700 hover:to-fuchsia-700 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="rounded-md bg-blue-600 text-white px-4 py-2 text-sm font-medium hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           Send
         </button>

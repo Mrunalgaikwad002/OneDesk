@@ -49,34 +49,52 @@ export default function TasksMockBoard() {
 
   return (
     <div>
-      <form onSubmit={createTask} className="mb-3 flex items-center gap-2">
-        <select value={target} onChange={(e)=>setTarget(e.target.value)} className="rounded-md border px-2 py-1 text-sm text-gray-900">
-          <option value="todo">To‑Do</option>
-          <option value="progress">In Progress</option>
-          <option value="done">Done</option>
-        </select>
-        <input value={newTitle} onChange={(e)=>setNewTitle(e.target.value)} placeholder="New task title" className="rounded-md border px-3 py-2 text-sm flex-1 text-gray-900 placeholder-gray-400" />
-        <button className="rounded-md bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white px-3 py-2 text-sm">+ Create Task</button>
+      <form onSubmit={createTask} className="mb-4 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg border border-blue-100">
+        <div className="flex items-center gap-3">
+          <select value={target} onChange={(e)=>setTarget(e.target.value)} className="input-modern px-3 py-2 text-sm font-medium">
+            <option value="todo">📋 To‑Do</option>
+            <option value="progress">⚡ In Progress</option>
+            <option value="done">✅ Done</option>
+          </select>
+          <input 
+            value={newTitle} 
+            onChange={(e)=>setNewTitle(e.target.value)} 
+            placeholder="Enter new task title..." 
+            className="input-modern flex-1 text-sm" 
+          />
+          <button className="btn-gradient-primary px-4 py-2 text-sm font-medium rounded-lg">
+            + Create Task
+          </button>
+        </div>
       </form>
       <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex gap-4 overflow-x-auto">
+        <div className="flex gap-6 overflow-x-auto custom-scrollbar">
           {[
-            { key: 'todo', title: 'To‑Do' },
-            { key: 'progress', title: 'In Progress' },
-            { key: 'done', title: 'Done' }
+            { key: 'todo', title: '📋 To‑Do', color: 'from-red-500 to-orange-500' },
+            { key: 'progress', title: '⚡ In Progress', color: 'from-blue-500 to-purple-500' },
+            { key: 'done', title: '✅ Done', color: 'from-green-500 to-teal-500' }
           ].map(col => (
-            <div key={col.key} className="min-w-64 w-64 rounded-lg border bg-white">
-              <div className="p-3 font-semibold text-gray-900">{col.title}</div>
+            <div key={col.key} className="min-w-72 w-72 rounded-xl border bg-white shadow-lg hover:shadow-xl transition-shadow">
+              <div className={`p-4 font-semibold text-white bg-gradient-to-r ${col.color} rounded-t-xl`}>
+                {col.title}
+              </div>
               <Droppable droppableId={col.key}>
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps} className="p-3 space-y-2 min-h-10">
                     {lists[col.key].map((t, i) => (
                       <Draggable key={t.id} draggableId={t.id} index={i}>
                         {(prov) => (
-                          <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps} className="rounded-md border p-2 text-sm bg-white">
-                            <div className="font-medium text-gray-900">{t.title}</div>
-                            <div className="mt-1 text-xs text-gray-700">Assignee: {t.assignee}</div>
-                            <div className="text-xs text-gray-700">Due: {t.due}</div>
+                          <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps} className="card-modern p-4 text-sm bg-white hover:shadow-md transition-shadow cursor-grab">
+                            <div className="font-medium text-gray-900 mb-2">{t.title}</div>
+                            <div className="flex items-center justify-between text-xs">
+                              <div className="flex items-center text-gray-600">
+                                <span className="w-2 h-2 bg-indigo-500 rounded-full mr-2"></span>
+                                {t.assignee}
+                              </div>
+                              <div className="text-gray-500">
+                                📅 {t.due}
+                              </div>
+                            </div>
                           </div>
                         )}
                       </Draggable>

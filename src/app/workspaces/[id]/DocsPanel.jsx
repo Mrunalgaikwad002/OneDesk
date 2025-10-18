@@ -50,7 +50,13 @@ export default function DocsPanel({ workspaceId }) {
     if (provider) provider.destroy();
     const ydoc = new Y.Doc();
     const ytext = ydoc.getText('quill');
-    const ws = new WebsocketProvider('ws://localhost:1234/yjs?documentId=' + id, 'document-' + id);
+    // y-websocket expects (serverUrl, roomName, ydoc, opts)
+    const ws = new WebsocketProvider(
+      'ws://localhost:1234',
+      'document-' + id,
+      ydoc,
+      { params: { documentId: id }, connect: true }
+    );
     setProvider(ws);
     ydocRef.current = ydoc;
     ytextRef.current = ytext;
@@ -98,6 +104,7 @@ export default function DocsPanel({ workspaceId }) {
       connect(res.document.id);
     } catch (err) {
       console.error('Failed to create document:', err);
+      alert(`Failed to create document: ${err.message}`);
     }
   };
 

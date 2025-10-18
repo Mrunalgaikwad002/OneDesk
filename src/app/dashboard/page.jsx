@@ -59,46 +59,91 @@ export default function DashboardPage() {
         </div>
         <div className="px-6 py-6">
           {error && <p className="text-rose-600 text-sm">{error}</p>}
-          <h1 className="text-2xl font-bold text-gray-900">Welcome{user ? `, ${user.fullName || user.email}` : ''} 👋</h1>
-          <p className="text-gray-900 mt-2">Quick links</p>
-          <div className="mt-4 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            <a href="/workspaces" className="rounded-lg border p-4 hover:shadow-sm">
-              <div className="font-semibold text-gray-900">Workspaces</div>
-              <p className="text-sm text-gray-900">Create or open your team spaces.</p>
+          <div className="fade-in">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
+              Welcome{user ? `, ${user.fullName || user.email}` : ''} 👋
+            </h1>
+            <p className="text-gray-600 mt-2 text-lg">Quick links to get started</p>
+          </div>
+          <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="/workspaces" className="card-modern p-6 group">
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                  🏢
+                </div>
+                <div className="ml-3">
+                  <div className="font-semibold text-gray-900 group-hover:text-indigo-600 transition-colors">Workspaces</div>
+                  <p className="text-sm text-gray-600">Create or open your team spaces</p>
+                </div>
+              </div>
             </a>
-            <a href="/documents" className="rounded-lg border p-4 hover:shadow-sm">
-              <div className="font-semibold text-gray-900">Documents</div>
-              <p className="text-sm text-gray-900">Collaborate in real-time.</p>
+            <a href="/documents" className="card-modern p-6 group">
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-blue-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                  📝
+                </div>
+                <div className="ml-3">
+                  <div className="font-semibold text-gray-900 group-hover:text-green-600 transition-colors">Documents</div>
+                  <p className="text-sm text-gray-600">Collaborate in real-time</p>
+                </div>
+              </div>
             </a>
-            <a href="/tasks" className="rounded-lg border p-4 hover:shadow-sm">
-              <div className="font-semibold text-gray-900">Tasks</div>
-              <p className="text-sm text-gray-900">Manage sprints and todos.</p>
+            <a href="/tasks" className="card-modern p-6 group">
+              <div className="flex items-center mb-3">
+                <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-red-500 rounded-lg flex items-center justify-center text-white font-bold text-lg">
+                  ✅
+                </div>
+                <div className="ml-3">
+                  <div className="font-semibold text-gray-900 group-hover:text-orange-600 transition-colors">Tasks</div>
+                  <p className="text-sm text-gray-600">Manage sprints and todos</p>
+                </div>
+              </div>
             </a>
           </div>
 
-          <div className="mt-8 grid md:grid-cols-2 gap-4">
-            <div className="rounded-lg border p-4">
-              <div className="flex items-center justify-between">
-                <div className="font-semibold text-gray-900">Recent activity</div>
+          <div className="mt-8 grid md:grid-cols-2 gap-6">
+            <div className="card-modern p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-gray-900 text-lg">Recent Activity</h3>
                 {recent.workspace && (
-                  <a className="text-xs text-indigo-600 hover:underline" href={`/workspaces/${recent.workspace.id}`}>Open {recent.workspace.name}</a>
+                  <a className="text-sm btn-gradient-primary px-3 py-1 rounded-full" href={`/workspaces/${recent.workspace.id}`}>
+                    Open {recent.workspace.name}
+                  </a>
                 )}
               </div>
-              <div className="mt-3 text-sm text-gray-900 space-y-2">
-                <div>
-                  <span className="font-medium">Last document:</span> {recent.doc ? recent.doc.title : '—'}
+              <div className="space-y-3">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white text-xs">
+                    📄
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">Last Document</div>
+                    <div className="text-sm text-gray-600">{recent.doc ? recent.doc.title : 'No documents yet'}</div>
+                  </div>
                 </div>
-                <div>
-                  <span className="font-medium">Recent message:</span> {recent.message ? recent.message.content : '—'}
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-gradient-to-r from-green-500 to-blue-500 rounded-full flex items-center justify-center text-white text-xs">
+                    💬
+                  </div>
+                  <div>
+                    <div className="font-medium text-gray-900">Recent Message</div>
+                    <div className="text-sm text-gray-600">{recent.message ? recent.message.content.slice(0, 50) + '...' : 'No messages yet'}</div>
+                  </div>
                 </div>
               </div>
             </div>
-            <div className="rounded-lg border p-4">
-              <div className="font-semibold text-gray-900">Shortcuts</div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <a href="/workspaces" className="rounded-md border px-3 py-2 text-sm hover:bg-gray-50 text-gray-900">+ Create Workspace</a>
-                <a href="/tasks" className="rounded-md border px-3 py-2 text-sm hover:bg-gray-50 text-gray-900">+ New Task</a>
-                <a href="/documents" className="rounded-md border px-3 py-2 text-sm hover:bg-gray-50 text-gray-900">+ New Document</a>
+            <div className="card-modern p-6">
+              <h3 className="font-semibold text-gray-900 text-lg mb-4">Quick Actions</h3>
+              <div className="space-y-3">
+                <a href="/workspaces" className="btn-gradient-primary w-full px-4 py-3 rounded-lg text-center block">
+                  + Create Workspace
+                </a>
+                <a href="/tasks" className="btn-gradient-secondary w-full px-4 py-3 rounded-lg text-center block">
+                  + New Task
+                </a>
+                <a href="/documents" className="w-full px-4 py-3 rounded-lg text-center block border-2 border-dashed border-gray-300 text-gray-600 hover:border-indigo-500 hover:text-indigo-600 transition-colors">
+                  + New Document
+                </a>
               </div>
             </div>
           </div>

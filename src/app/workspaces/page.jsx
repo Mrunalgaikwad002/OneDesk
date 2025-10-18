@@ -42,13 +42,23 @@ export default function WorkspacesPage() {
 
   const onCreate = async (e) => {
     e.preventDefault();
-    if (!name.trim()) return;
+    console.log('Create workspace clicked, name:', name, 'length:', name?.length);
+    console.log('Name trimmed:', name?.trim(), 'length:', name?.trim()?.length);
+    if (!name || !name.trim()) {
+      console.log('No workspace name provided - showing alert');
+      alert('Please enter a workspace name');
+      return;
+    }
     try {
-      const res = await apiPost('/api/workspaces', { name }, token);
+      console.log('Creating workspace via API with name:', name.trim());
+      const res = await apiPost('/api/workspaces', { name: name.trim() }, token);
+      console.log('Workspace created successfully:', res);
       setWorkspaces([res.workspace, ...workspaces]);
       setName("");
+      setError("");
     } catch (e) {
-      setError(e.message);
+      console.error('Failed to create workspace:', e);
+      setError(`Failed to create workspace: ${e.message}`);
     }
   };
 
@@ -58,12 +68,24 @@ export default function WorkspacesPage() {
         <div className="flex items-center justify-between">
           <h1 className="text-2xl font-bold text-gray-900">Your Workspaces</h1>
           <form onSubmit={onCreate} className="flex items-center gap-2">
-            <input value={name} onChange={(e)=>setName(e.target.value)} placeholder="New workspace name" className="rounded-md border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-            <button className="rounded-md bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white px-4 py-2 text-sm font-medium hover:opacity-90">Create</button>
+            <input 
+              type="text"
+              name="workspaceName"
+              value={name} 
+              onChange={(e)=>{
+                console.log('Input changed:', e.target.value);
+                setName(e.target.value);
+              }} 
+              placeholder="New workspace name" 
+              className="rounded-md border px-3 py-2 text-sm text-gray-900 placeholder-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" 
+              required
+            />
+            <button type="submit" className="rounded-md bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white px-4 py-2 text-sm font-medium hover:opacity-90">Create</button>
           </form>
         </div>
 
         {error && <p className="mt-4 text-sm text-rose-600">{error}</p>}
+        {name && <p className="mt-2 text-sm text-gray-600">Current input: "{name}"</p>}
 
         <div className="mt-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {loading ? (

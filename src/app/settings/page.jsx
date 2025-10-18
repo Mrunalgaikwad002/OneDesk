@@ -45,11 +45,11 @@ export default function SettingsPage() {
             <div className="mt-4 space-y-3">
               <div>
                 <label className="text-sm text-gray-700">Full name</label>
-                <input value={fullName} onChange={(e)=>setFullName(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <input value={fullName} onChange={(e)=>setFullName(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2 text-black placeholder-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               <div>
                 <label className="text-sm text-gray-700">Avatar URL</label>
-                <input value={avatarUrl} onChange={(e)=>setAvatarUrl(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2 text-black placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+                <input value={avatarUrl} onChange={(e)=>setAvatarUrl(e.target.value)} className="mt-1 w-full rounded-md border px-3 py-2 text-black placeholder-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
               </div>
               {msg && <p className="text-sm text-gray-900">{msg}</p>}
               <button className="rounded-md bg-gradient-to-r from-indigo-600 to-fuchsia-600 text-white px-4 py-2 text-sm font-medium hover:opacity-90">Save changes</button>

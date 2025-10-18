@@ -14,6 +14,7 @@ export default function VideoPanel({ workspaceId = 'demo-workspace' }) {
   const [isAudioEnabled, setIsAudioEnabled] = useState(true);
   const [incomingCall, setIncomingCall] = useState(null);
   const [showCallPopup, setShowCallPopup] = useState(false);
+  const [lastMediaError, setLastMediaError] = useState('');
   
   const myVideo = useRef(null);
   const peersRef = useRef({});
@@ -23,20 +24,17 @@ export default function VideoPanel({ workspaceId = 'demo-workspace' }) {
   // Get user media
   useEffect(() => {
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
-      .then(mediaStream => {
+      .then(async mediaStream => {
+        setLastMediaError('');
         setStream(mediaStream);
         if (myVideo.current) {
           myVideo.current.srcObject = mediaStream;
+          try { await myVideo.current.play(); } catch (e) {}
         }
       })
       .catch(err => {
         console.log('Media access denied:', err);
-        // Try audio only
-        navigator.mediaDevices.getUserMedia({ video: false, audio: true })
-          .then(audioStream => {
-            setStream(audioStream);
-          })
-          .catch(audioErr => console.log('Audio access also denied:', audioErr));
+        setLastMediaError(err?.name || 'MediaError');
       });
 
     return () => {
@@ -149,21 +147,45 @@ export default function VideoPanel({ workspaceId = 'demo-workspace' }) {
     });
   };
 
-  const startCall = () => {
+  const ensureLocalStream = async () => {
+    if (stream) return stream;
+    try {
+      const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+      setStream(mediaStream);
+      if (myVideo.current) {
+        myVideo.current.srcObject = mediaStream;
+        try { await myVideo.current.play(); } catch (e) {}
+      }
+      setLastMediaError('');
+      return mediaStream;
+    } catch (err) {
+      console.log('Media access denied or unavailable:', err);
+      setLastMediaError(err?.name || 'MediaError');
+      return null;
+    }
+  };
+
+  const startCall = async () => {
     if (!socket) {
       alert('Socket connection not available');
       return;
     }
-    
+
+    const haveStream = await ensureLocalStream();
+    if (!haveStream) {
+      alert('Unable to access camera/microphone. Please allow permissions and try again.');
+      return;
+    }
+
     const newCallId = `call-${Date.now()}`;
     setCallId(newCallId);
-    
+
     socket.emit('start_call', {
       callId: newCallId,
       workspaceId,
       callType: 'group'
     });
-    
+
     setInCall(true);
   };
 
@@ -269,6 +291,21 @@ export default function VideoPanel({ workspaceId = 'demo-workspace' }) {
             playsInline
             className="w-full h-64 object-cover rounded-lg border-2 border-gray-300 bg-gray-100"
           />
+          {!stream && (
+            <div className="absolute inset-0 flex flex-col items-center justify-center gap-2">
+              <button
+                onClick={ensureLocalStream}
+                className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors"
+              >
+                Enable Camera/Mic
+              </button>
+              {lastMediaError && (
+                <span className="text-xs text-red-600 bg-white/80 rounded px-2 py-1">
+                  {lastMediaError}
+                </span>
+              )}
+            </div>
+          )}
           <div className="absolute bottom-2 left-2 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-xs">
             You {!isVideoEnabled && '(Video Off)'} {!isAudioEnabled && '(Muted)'}
           </div>

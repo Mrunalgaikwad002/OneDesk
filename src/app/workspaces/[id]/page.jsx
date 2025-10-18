@@ -61,68 +61,99 @@ export default function WorkspacePage({ params }) {
   }, [id, token]);
 
   return (
-    <div className="min-h-screen bg-white px-6 py-8">
-      <div className={active === 'whiteboard' ? 'max-w-full mx-auto px-4' : 'max-w-6xl mx-auto'}>
-        {/* Call Notification */}
-        <CallNotification workspaceId={ws?.id} />
-        
-        {ws ? (
-          <>
-            <div className="flex items-center justify-between">
-              <div>
-                <h1 className="text-2xl font-bold text-gray-900">{ws.name}</h1>
-                {ws.description && <p className="text-sm text-gray-600 mt-1">{ws.description}</p>}
-              </div>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setActive('video')}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors text-sm font-medium"
-                >
-                  📹 Video Call
-                </button>
-                <span className="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">Role: {ws.userRole}</span>
-              </div>
+    <div className="h-full flex flex-col">
+      {/* Call Notification */}
+      <CallNotification workspaceId={ws?.id} />
+      
+      {ws ? (
+        <>
+          <div className="flex items-center justify-between p-6 bg-white border-b">
+            <div>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">{ws.name}</h1>
+              {ws.description && <p className="text-gray-600 mt-1">{ws.description}</p>}
             </div>
-
-            <div className="mt-6 border-b flex gap-2">
-              {tabs.map(t => (
-                <button key={t.key} onClick={()=>setActive(t.key)} className={`px-3 py-2 text-sm font-medium border-b-2 -mb-px ${active===t.key? 'border-indigo-600 text-indigo-700':'border-transparent text-gray-600 hover:text-gray-900'}`}>{t.label}</button>
-              ))}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setActive('video')}
+                className="btn-gradient-primary px-6 py-3 rounded-lg font-medium"
+              >
+                📹 Video Call
+              </button>
+              <span className="text-sm px-3 py-2 rounded-full bg-blue-100 text-blue-700 font-medium">
+                Role: {ws.userRole}
+              </span>
             </div>
+          </div>
 
-            <div className={`mt-6 ${active === 'whiteboard' ? 'w-full' : 'grid md:grid-cols-3 gap-4'}`}>
-              {active==='chat' && (
-                <>
-                  <div className="md:col-span-1">
-                    <ChatRooms workspaceId={ws.id} onJoin={(room)=>setWs(prev=>({...prev, activeRoom: room}))} />
-                  </div>
-                  <div className="md:col-span-2">
-                    <ChatPanel roomId={ws?.activeRoom?.id || ws?.generalRoomId || ws?.id} />
-                  </div>
-                </>
-              )}
-              {active==='tasks' && (
-                <TasksPanel workspaceId={ws.id} />
-              )}
-              {active==='docs' && (
-                <DocsPanel workspaceId={ws.id} />
-              )}
-              {active==='whiteboard' && (
-                <div className="w-full">
-                  <WhiteboardPanel />
+          <div className="flex border-b bg-gray-50 p-2">
+            {tabs.map(t => (
+              <button 
+                key={t.key} 
+                onClick={()=>setActive(t.key)} 
+                className={`tab-modern px-6 py-3 text-sm font-medium mr-2 ${
+                  active===t.key ? 'active' : ''
+                }`}
+              >
+                <span className="flex items-center">
+                  {t.key === 'chat' && '💬'}
+                  {t.key === 'tasks' && '📋'}
+                  {t.key === 'docs' && '📝'}
+                  {t.key === 'whiteboard' && '🎨'}
+                  {t.key === 'video' && '📹'}
+                  <span className="ml-2">{t.label}</span>
+                </span>
+              </button>
+            ))}
+          </div>
+
+          <div className="flex-1 overflow-hidden">
+            {active==='chat' && (
+              <div className="h-full flex">
+                <div className="w-80 border-r bg-white">
+                  <ChatRooms workspaceId={ws.id} onJoin={(room)=>setWs(prev=>({...prev, activeRoom: room}))} />
                 </div>
-              )}
-              {active==='video' && (
+                <div className="flex-1">
+                  <ChatPanel roomId={ws?.activeRoom?.id || ws?.generalRoomId || ws?.id} />
+                </div>
+              </div>
+            )}
+            {active==='tasks' && (
+              <div className="h-full overflow-auto">
+                <TasksPanel workspaceId={ws.id} />
+              </div>
+            )}
+            {active==='docs' && (
+              <div className="h-full overflow-auto">
+                <DocsPanel workspaceId={ws.id} />
+              </div>
+            )}
+            {active==='whiteboard' && (
+              <div className="h-full overflow-auto">
+                <WhiteboardPanel />
+              </div>
+            )}
+            {active==='video' && (
+              <div className="h-full overflow-auto">
                 <VideoPanel workspaceId={ws.id} />
-              )}
-            </div>
-          </>
-        ) : error ? (
-          <div className="text-rose-600">{error}</div>
-        ) : (
-          <div className="text-gray-600">Loading...</div>
-        )}
-      </div>
+              </div>
+            )}
+          </div>
+        </>
+      ) : error ? (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-rose-600 text-center">
+            <div className="text-6xl mb-4">😞</div>
+            <div className="text-xl font-semibold">{error}</div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center">
+            <div className="loading-spinner mx-auto mb-4"></div>
+            <div className="text-gray-600">Loading workspace...</div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

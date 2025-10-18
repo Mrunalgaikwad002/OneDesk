@@ -8,6 +8,7 @@ export default function TasksBoard({ boardId }) {
   const token = getToken();
   const [board, setBoard] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [newTaskByList, setNewTaskByList] = useState({});
 
   const load = async () => {
     const res = await apiGet(`/api/tasks/boards/${boardId}`, token);
@@ -34,6 +35,19 @@ export default function TasksBoard({ boardId }) {
       }
       await load();
     } catch {}
+  };
+
+  const createTask = async (listId) => {
+    const title = (newTaskByList[listId] || "").trim();
+    if (!title) return;
+    try {
+      await apiPost(`/api/tasks/lists/${listId}/tasks`, { title }, token);
+      setNewTaskByList(prev => ({ ...prev, [listId]: "" }));
+      await load();
+    } catch (e) {
+      console.error('Failed to create task', e);
+      alert(`Failed to create task: ${e.message}`);
+    }
   };
 
   if (loading) return <div className="text-gray-600">Loading board...</div>;
@@ -65,6 +79,22 @@ export default function TasksBoard({ boardId }) {
                     </Draggable>
                   ))}
                   {provided.placeholder}
+                  <div className="pt-2 border-t mt-2">
+                    <div className="flex items-center gap-2">
+                      <input
+                        value={newTaskByList[list.id] || ""}
+                        onChange={(e)=>setNewTaskByList(prev=>({ ...prev, [list.id]: e.target.value }))}
+                        placeholder="New task title"
+                        className="w-full px-2 py-1 border rounded text-sm text-gray-900"
+                      />
+                      <button
+                        onClick={() => createTask(list.id)}
+                        className="px-2 py-1 bg-indigo-600 text-white rounded text-sm"
+                      >
+                        +
+                      </button>
+                    </div>
+                  </div>
                 </div>
               )}
             </Droppable>

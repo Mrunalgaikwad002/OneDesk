@@ -7,13 +7,13 @@ export default function WorkspaceLayout({ children }) {
     if (typeof window !== 'undefined') window.location.replace('/login');
   };
   return (
-    <div className="min-h-screen bg-white flex">
+    <div className="min-h-screen flex">
       <Sidebar onLogout={onLogout} />
-      <main className="flex-1">
-        <div className="h-16 border-b flex items-center px-4 justify-between">
-          <div className="font-medium text-gray-800">Workspaces</div>
+      <main className="flex-1 flex flex-col">
+        <div className="h-16 border-b flex items-center px-6 justify-between bg-white/80 backdrop-blur-sm">
+          <div className="font-semibold text-gray-800 text-lg">Workspaces</div>
         </div>
-        <div className="px-6 py-6">{children}</div>
+        <div className="flex-1 p-0 overflow-hidden">{children}</div>
       </main>
     </div>
   );
