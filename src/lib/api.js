@@ -1,8 +1,11 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://onedesk-backend.onrender.com';
+// Force use of deployed backend URL - no localhost references
+// Updated to ensure no localhost references in production
+export const API_BASE_URL = 'https://onedesk-backend.onrender.com';
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 
 export async function apiPost(path, body, token) {
   try {
+    console.log('API Request to:', `${API_BASE_URL}${path}`);
     const res = await fetch(`${API_BASE_URL}${path}`, {
       method: 'POST',
       headers: {
