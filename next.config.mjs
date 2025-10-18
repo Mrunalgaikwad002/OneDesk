@@ -27,7 +27,7 @@ const nextConfig = {
   
   // Environment variables
   env: {
-    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || 'https://onedesk-backend.onrender.com',
+    NEXT_PUBLIC_API_URL: 'https://onedesk-backend.onrender.com',
   },
   
   // Headers for CORS

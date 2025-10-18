@@ -18,7 +18,7 @@ export function getSocket(token) {
   }
 
   try {
-    socketInstance = io(process.env.NEXT_PUBLIC_API_URL || 'https://onedesk-backend.onrender.com', {
+    socketInstance = io('https://onedesk-backend.onrender.com', {
       auth: { token },
       autoConnect: true,
       transports: ['websocket', 'polling'],
