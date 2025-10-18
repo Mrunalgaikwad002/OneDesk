@@ -26,9 +26,13 @@ export default function ChatRooms({ workspaceId, onJoin }) {
       setRooms(res.rooms || []);
     } catch (err) {
       console.error('Failed to load rooms:', err);
-      // If it's a network error (backend not running), show demo rooms
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-        console.log('Backend unavailable, showing demo rooms');
+      // If it's a network error or auth error, show demo rooms
+      if (err.message.includes('Failed to fetch') || 
+          err.message.includes('NetworkError') || 
+          err.message.includes('Access token required') ||
+          err.message.includes('Request failed') ||
+          err.message.includes('Network error')) {
+        console.log('Backend unavailable or auth error, showing demo rooms');
         setRooms([
           { id: 'demo-room-1', name: 'General', type: 'general', createdAt: new Date().toISOString() },
           { id: 'demo-room-2', name: 'Development', type: 'group', createdAt: new Date().toISOString() },
@@ -92,9 +96,13 @@ export default function ChatRooms({ workspaceId, onJoin }) {
       }
     } catch (err) {
       console.error('Failed to create room:', err);
-      // If backend is unavailable, create a local demo room
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-        console.log('Backend unavailable, creating local demo room');
+      // If backend is unavailable or auth error, create a local demo room
+      if (err.message.includes('Failed to fetch') || 
+          err.message.includes('NetworkError') ||
+          err.message.includes('Access token required') ||
+          err.message.includes('Request failed') ||
+          err.message.includes('Network error')) {
+        console.log('Backend unavailable or auth error, creating local demo room');
         const newRoom = { 
           id: `demo-room-${Date.now()}`, 
           name: name.trim(), 

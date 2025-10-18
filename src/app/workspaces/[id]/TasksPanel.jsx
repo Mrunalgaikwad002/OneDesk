@@ -38,9 +38,13 @@ export default function TasksPanel({ workspaceId }) {
         }
       } catch (err) {
         console.error('Failed to load boards:', err);
-        // If backend is unavailable, show demo boards
-        if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-          console.log('Backend unavailable, showing demo boards');
+        // If backend is unavailable or auth error, show demo boards
+        if (err.message.includes('Failed to fetch') || 
+            err.message.includes('NetworkError') ||
+            err.message.includes('Access token required') ||
+            err.message.includes('Request failed') ||
+            err.message.includes('Network error')) {
+          console.log('Backend unavailable or auth error, showing demo boards');
           const demoBoards = [
             {
               id: 'demo-board-1',
@@ -81,9 +85,13 @@ export default function TasksPanel({ workspaceId }) {
       setShowCreateForm(false);
     } catch (err) {
       console.error('Failed to create board:', err);
-      // If backend is unavailable, create a local demo board
-      if (err.message.includes('Failed to fetch') || err.message.includes('NetworkError')) {
-        console.log('Backend unavailable, creating local demo board');
+      // If backend is unavailable or auth error, create a local demo board
+      if (err.message.includes('Failed to fetch') || 
+          err.message.includes('NetworkError') ||
+          err.message.includes('Access token required') ||
+          err.message.includes('Request failed') ||
+          err.message.includes('Network error')) {
+        console.log('Backend unavailable or auth error, creating local demo board');
         const newBoard = {
           id: `demo-board-${Date.now()}`,
           name: name.trim(),
