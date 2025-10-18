@@ -1,4 +1,4 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://your-backend-domain.vercel.app';
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 
 export async function apiPost(path, body, token) {
