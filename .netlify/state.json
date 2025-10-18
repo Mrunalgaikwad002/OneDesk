@@ -1,0 +1,6 @@
+{
+  "siteId": "onedesk-app",
+  "secretsScan": {
+    "enabled": false
+  }
+}

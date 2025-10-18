@@ -16,10 +16,7 @@ const nextConfig = {
     return config;
   },
   
-  // Environment variables
-  env: {
-    NEXT_PUBLIC_API_URL: 'https://onedesk-backend.onrender.com',
-  },
+  // Environment variables will be set by Netlify
   
   // Headers for CORS
   async headers() {

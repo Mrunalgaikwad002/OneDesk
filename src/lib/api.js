@@ -1,4 +1,4 @@
-export const API_BASE_URL = 'https://onedesk-backend.onrender.com';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://onedesk-backend.onrender.com';
 export const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
 
 export async function apiPost(path, body, token) {

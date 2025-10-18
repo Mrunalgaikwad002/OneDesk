@@ -1,0 +1,6 @@
+# Ignore build artifacts and cache files
+.next/cache/**
+.netlify/**
+node_modules/**
+*.log
+.env*
