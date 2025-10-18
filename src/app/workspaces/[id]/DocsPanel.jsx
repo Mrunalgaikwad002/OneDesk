@@ -52,7 +52,7 @@ export default function DocsPanel({ workspaceId }) {
     const ytext = ydoc.getText('quill');
     // y-websocket expects (serverUrl, roomName, ydoc, opts)
     const ws = new WebsocketProvider(
-      'ws://localhost:1234',
+      'wss://onedesk-backend.onrender.com',
       'document-' + id,
       ydoc,
       { params: { documentId: id }, connect: true }
