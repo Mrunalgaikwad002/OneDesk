@@ -7,7 +7,6 @@ import ChatRooms from "./ChatRooms";
 import TasksPanel from "./TasksPanel";
 import DocsPanel from "./DocsPanel";
 import WhiteboardPanel from "./WhiteboardPanel";
-import WhiteboardKonva from "./WhiteboardKonva";
 import VideoPanel from "./VideoPanel";
 import CallNotification from "../../../components/CallNotification";
 

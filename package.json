@@ -11,11 +11,9 @@
   "dependencies": {
     "@hello-pangea/dnd": "^18.0.1",
     "@supabase/supabase-js": "^2.58.0",
-    "konva": "^9.3.22",
     "next": "15.5.4",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "react-konva": "^18.2.14",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "react-quill-new": "^3.0.0",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.7.4",
@@ -30,5 +28,13 @@
     "eslint": "^9",
     "eslint-config-next": "15.5.4",
     "tailwindcss": "^4"
+  },
+  "overrides": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "resolutions": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   }
 }
