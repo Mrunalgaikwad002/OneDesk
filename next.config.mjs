@@ -1,9 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Enable experimental features
-  experimental: {
-    serverComponentsExternalPackages: ['y-websocket']
-  },
+  // External packages for server components
+  serverExternalPackages: ['y-websocket'],
   
   // Webpack configuration
   webpack: (config, { isServer }) => {
@@ -14,13 +12,6 @@ const nextConfig = {
         canvas: false,
       };
     }
-    
-    // Force React 18 compatibility
-    config.resolve.alias = {
-      ...config.resolve.alias,
-      'react': require.resolve('react'),
-      'react-dom': require.resolve('react-dom'),
-    };
     
     return config;
   },
