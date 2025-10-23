@@ -5,30 +5,30 @@ A modern, real-time collaborative workspace platform built with Next.js 15, feat
 ## 📸 Screenshots
 
 ### 🏠 Landing Page
-![Landing Page](public/landing.png)
+![Landing Page](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/landing.png?raw=true)
 
 ### 🔐 Authentication & User Management
-![Login Page](public/login-page.png)
-![Settings](public/settings.png)
+![Login Page](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/login%20page.png?raw=true)
+![Settings](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/settings.png?raw=true)
 
 ### 🏢 Workspace Management
-![Dashboard](public/dashboard.png)
-![Workspace](public/workspace.png)
+![Dashboard](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/dashboard.png?raw=true)
+![Workspace](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/workspace.png?raw=true)
 
 ### 💬 Real-time Chat System
-![Chat](public/chat.png)
+![Chat](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/chat.png?raw=true)
 
 ### 📋 Task Management (Kanban Board)
-![Tasks](public/tasks.png)
+![Tasks](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/tasks.png?raw=true)
 
 ### 📝 Collaborative Document Editor
-![Document Editor](public/tiptap-editor.png)
+![Document Editor](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/tiptap%20editor.png?raw=true)
 
 ### 🎨 Interactive Whiteboard
-![Whiteboard](public/whiteboard.png)
+![Whiteboard](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/whiteboard.png?raw=true)
 
 ### 📹 Video Conferencing
-![Video Conferencing](public/video-conferencing.png)
+![Video Conferencing](https://github.com/Mrunalgaikwad002/OneDesk/blob/main/video%20conferencing.png?raw=true)
 
 ## 🚀 Features
 
