@@ -9,9 +9,7 @@ export default function Navbar() {
           </span>
         </a>
         <nav className="hidden sm:flex items-center gap-5 text-sm text-gray-600">
-          <a href="#features" className="hover:text-gray-900">Features</a>
-          <a href="#pricing" className="hover:text-gray-900">Pricing</a>
-          <a href="#" className="hover:text-gray-900">Docs</a>
+         
         </nav>
         <div className="flex items-center gap-3">
           <a href="/login" className="hidden sm:inline-flex h-9 items-center rounded-md border px-3 text-sm font-medium hover:bg-gray-50">Log in</a>
