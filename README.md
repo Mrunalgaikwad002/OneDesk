@@ -2,6 +2,34 @@
 
 A modern, real-time collaborative workspace platform built with Next.js 15, featuring team chat, task management, document collaboration, whiteboard, and video conferencing.
 
+## 📸 Screenshots
+
+### 🏠 Landing Page
+![Landing Page](./public/landing.png)
+
+### 🔐 Authentication & User Management
+![Login Page](./public/login-page.png)
+![Settings](./public/settings.png)
+
+### 🏢 Workspace Management
+![Dashboard](./public/dashboard.png)
+![Workspace](./public/workspace.png)
+
+### 💬 Real-time Chat System
+![Chat](./public/chat.png)
+
+### 📋 Task Management (Kanban Board)
+![Tasks](./public/tasks.png)
+
+### 📝 Collaborative Document Editor
+![Document Editor](./public/tiptap-editor.png)
+
+### 🎨 Interactive Whiteboard
+![Whiteboard](./public/whiteboard.png)
+
+### 📹 Video Conferencing
+![Video Conferencing](./public/video-conferencing.png)
+
 ## 🚀 Features
 
 ### 🔐 Authentication & User Management
