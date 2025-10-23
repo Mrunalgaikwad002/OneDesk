@@ -5,30 +5,30 @@ A modern, real-time collaborative workspace platform built with Next.js 15, feat
 ## 📸 Screenshots
 
 ### 🏠 Landing Page
-![Landing Page](./public/landing.png)
+![Landing Page](landing.png)
 
 ### 🔐 Authentication & User Management
-![Login Page](./public/login-page.png)
-![Settings](./public/settings.png)
+![Login Page](login-page.png)
+![Settings](settings.png)
 
 ### 🏢 Workspace Management
-![Dashboard](./public/dashboard.png)
-![Workspace](./public/workspace.png)
+![Dashboard](dashboard.png)
+![Workspace](workspace.png)
 
 ### 💬 Real-time Chat System
-![Chat](./public/chat.png)
+![Chat](chat.png)
 
 ### 📋 Task Management (Kanban Board)
-![Tasks](./public/tasks.png)
+![Tasks](tasks.png)
 
 ### 📝 Collaborative Document Editor
-![Document Editor](./public/tiptap-editor.png)
+![Document Editor](tiptap-editor.png)
 
 ### 🎨 Interactive Whiteboard
-![Whiteboard](./public/whiteboard.png)
+![Whiteboard](whiteboard.png)
 
 ### 📹 Video Conferencing
-![Video Conferencing](./public/video-conferencing.png)
+![Video Conferencing](video-conferencing.png)
 
 ## 🚀 Features
 
@@ -332,3 +332,4 @@ For support and questions:
 ---
 
 **OneDesk** - Unify your workflow with real-time collaboration! 🚀
+
